@@ -15,15 +15,23 @@ to_numage <- function(df) {
     filter(Name != 'NR') %>% 
     filter(Time != 'NR') %>% 
     filter(Pace != 'NR') %>%
-    # setting age as numeric
-    mutate(Age = as.numeric(Age))
+    # setting age as an integer
+    mutate(Age = as.integer(Age))
   
   # splitting time and pace into HMS values
   df <- df %>% 
     separate(Time, into = c("T_Hour", "T_Min", "T_Sec"), remove = FALSE) %>% 
     separate(Pace, into = c("P_Min", "P_Sec")) %>% 
     # we are observing only 10M length races, so we can split the year and take that out
-    separate(Race, into = c("Year", "Race_Length")) 
+    separate(Race, into = c("Year", "Race_Length"))
+  
+  # now set those separated columns to integers
+  df <- df %>% 
+    mutate(T_Hour = as.integer(T_Hour)) %>%
+    mutate(T_Min = as.integer(T_Min)) %>% 
+    mutate(T_Sec = as.integer(T_Sec)) %>% 
+    mutate(P_Min = as.integer(P_Min)) %>% 
+    mutate(P_Sec = as.integer(P_Sec))
   
   # keeping most important columns to be used for analysis
   df <- df[c("Year",
