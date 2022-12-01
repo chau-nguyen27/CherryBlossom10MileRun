@@ -1,5 +1,6 @@
 library('tidyverse')
 library('tidyr')
+library('dplyr')
 
 load("CBData_raw.RData")
 
@@ -31,7 +32,8 @@ to_numage <- function(df) {
     mutate(T_Min = as.integer(T_Min)) %>% 
     mutate(T_Sec = as.integer(T_Sec)) %>% 
     mutate(P_Min = as.integer(P_Min)) %>% 
-    mutate(P_Sec = as.integer(P_Sec))
+    mutate(P_Sec = as.integer(P_Sec)) %>% 
+    mutate(Year = as.integer(Year))
   
   # keeping most important columns to be used for analysis
   df <- df[c("Year",
@@ -43,13 +45,12 @@ to_numage <- function(df) {
              "P_Min",
              "P_Sec",
              "PiS.TiS",
-             "PiD.TiD")]
+             "PiD.TiD",
+             "Hometown")]
 }
 
 # testing the 15th year of the race to see if it works
 # test = to_numage(data.frame(CBData_raw[15]))
-
-
 
 ## Combining data
 cleaned = data.frame()
@@ -61,7 +62,17 @@ for (i in 1:47) {
   cleaned = rbind(cleaned, temp)
 }
 
+# saving the cleaned data into a csv file
+write.csv(cleaned, "cleaned_data_csv.csv", row.names = FALSE)
+
 ## Merging weather data (?)
 
 ## Identify same runners across races (might need to use "elite runners" records)
+# matching racers by their name to get a list of potential repeating
+# runners by using a combination of their hometown and the year-age
+# Num_Entries is how many races they have been in
+same_runners = cleaned %>% 
+  group_by(Name) %>% 
+  count(Name, Year-Age, Hometown, name = 'Num_Entries') %>% 
+  arrange(desc(Num_Entries))
 
