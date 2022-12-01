@@ -70,9 +70,8 @@ write.csv(cleaned, "cleaned_data_csv.csv", row.names = FALSE)
 ## Identify same runners across races (might need to use "elite runners" records)
 # matching racers by their name to get a list of potential repeating
 # runners by using a combination of their hometown and the year-age
-# Num_Entries is how many races they have been in
 same_runners = cleaned %>% 
   group_by(Name) %>% 
-  count(Name, Year-Age, Hometown, name = 'Num_Entries') %>% 
-  arrange(desc(Num_Entries))
+  count(Name, Year-Age, Hometown, name = 'Races_Ran') %>% 
+  arrange(desc(Races_Ran))
 
