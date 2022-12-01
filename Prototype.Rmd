@@ -1,0 +1,212 @@
+---
+title: "Prototype"
+author: "Chau Nguyen"
+date: "2022-11-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(stringr)
+library(tidyr)
+library(ggplot2)
+
+load("CBdata.1_10.RData")
+
+# comnine all data into a single data frame
+allData_raw <- bind_rows(CBdata.1_10)
+
+# Split "gender" from "name" 
+allData <- allData_raw %>% 
+  mutate(gender = sapply(strsplit(allData_raw$Name, '[(]'),
+               function(x) str_sub(x[2],1,1))) %>% 
+  rename(name = Name) %>% 
+  mutate(name = str_sub(name,1,-5))
+
+## Fix 1 error when getting gender
+nrow(allData[allData$gender=="e",])
+allData_raw[6624,] # examinine the case
+allData <- allData %>% 
+  mutate(gender = case_when(gender=="e"~ "W",
+                            TRUE ~ gender))
+
+sum(is.na(allData$gender))
+View(allData[allData$gender=="e",])
+allData <- allData %>% filter(!is.na(Age)) %>% 
+  filter(!is.na(gender))
+
+# Time conversion to minute
+
+allData <- allData %>% 
+  mutate(time = sapply(sapply(strsplit(Time, ":"), as.numeric),
+                       function(x) {
+                         x[1]*60 + x[2] + x[3]/60
+                       }
+                       ))
+# Summary missing run time by year
+
+# head(allData[is.na(allData$time),],20)
+# {
+allData %>%
+  filter(is.na(time)) %>% 
+  group_by(Year) %>% 
+  summarize(
+    missing_time = n()
+  ) # all missing time are in 1977 (882/1587) and 1978 (1507/2064)
+
+
+c(nrow(allData[allData$Year==1977 & is.na(allData$time),]),"/",
+  nrow(allData[allData$Year==1977,]), " ; ",
+  nrow(allData[allData$Year==1978 & is.na(allData$time),]),"/",
+  nrow(allData[allData$Year==1978,]))
+
+
+# Keep age and place (PiS/TiS) information, filter runners 10 year or older, drop missing age observation
+allData <- allData %>%
+    rename( age = Age ) %>%
+    rename( place = "PiS/TiS" ) %>%
+    mutate( Race = substr( Race, 6, length(Race) ) ) %>%
+    filter( age != is.nan(age) ) %>%
+    filter( age >= 10 )                                     
+
+
+```
+
+```{r}
+# Plot "runtime" against "age"
+
+ggplot(data = allData,
+       aes(x= age,
+           y= time)) +
+  geom_point(shape=1, size=0.5) +
+  xlab("Age in years") +
+  ylab("Run time in minutes") +
+  ylim(40,180) +
+  ggtitle("Runtime against Age, by gender") +
+  facet_wrap(gender~.)
+```
+
+
+```{r}
+# Boxplot runtime against age category, by gender
+## Create age group by decade
+allData <- allData %>%
+    mutate( agecat = 10*floor( age/10 ) ) %>% 
+    mutate( agecat = as.character(agecat) )
+
+ggplot(data = allData,
+  aes(x = agecat,
+      y = time)) + # by age groups in decades
+  geom_boxplot() + # boxplot
+  # scale_x_discrete(limits = c("10","20","30","40","50","60","70","80","90","100")) +
+  ylab("Run time in minute") +
+  ylim(40,150) +
+  ggtitle("Composition of age groups for each performance percentile") +
+  labs(fill= "Age groups in decade") +
+  facet_wrap(gender~.)
+```
+
+```{r}
+# Linear regression
+allData <- allData %>% 
+  filter(!is.na(time))
+model <- lm(time~ age + gender + age:gender, data=allData); 
+summary(model)
+
+```
+
+
+```{r}
+# Residual diagnostic
+plot(fitted(model), rstandard(model)); abline(0,0) # residual pattern against fitted response
+qqnorm(rstandard(model));qqline(rstandard(model)) # normality of residual
+hist(rstandard(model), breaks=30, xlim=c(-6,6), freq = F); curve(dnorm, add=T)
+
+smoothScatter(x=allData$age, y=model$residuals,
+              xlab="Ages", ylab = "Residuals"); abline(h=0)
+
+resid.lo = loess(resids ~ age, data=data.frame(resids=rstandard(model),                                            age = allData$age))
+res.lo.pred=predict(resid.lo, newdata = data.frame(age=10:100))
+smoothScatter(x=allData$age, y=model$residuals,
+              xlab="Ages", ylab = "Residuals"); abline(h=0); lines(x=10:100, y=res.lo.pred,col="red", lwd=2,lty=3)
+
+```
+
+
+```{r}
+# Non parametric model
+allData.m <- allData[allData$gender=="M",]
+allData.w <- allData[allData$gender=="W",]
+model.loess.m=loess(time ~ age, data = allData.m)
+model.loess.w=loess(time ~ age, data = allData.w)
+plot(y=predict(model.loess.m), x=allData.m$age,
+     xlab = "Age",
+     ylab = "Predicted time (minutes)",
+     main="Prediction of Performance using Nonparametric model - Men (Loess method)")
+plot(y=predict(model.loess.w), x=allData.w$age,
+     xlab = "Age",
+     ylab = "Predicted time (minutes)",
+     main="Prediction of Performance using Nonparametric model - Women (Loess method)")
+```
+
+```{r descriptive_stat}
+# NEED SOME DESCRIPTIVE STATISTICS HERE!
+# TABLES and GRAPHS show info of age, running time, missing data, number of observations (average, median, max, min) by YEAR
+## eg. histogram of age (show the composition of age in each race, remember to include the number of observations in notes/legend/etc)
+## eg. histogram of age by gender (for those years that number of runners are stable and without many missing data - LOOK OUT FOR MISSING DATA - is there a pattern in missing data???)
+
+# A GRAPH IN VIZUALIZATION LAB WE DIDN'T NEED TO DRAW - the one I sent on 11/14/2022 10:44 AM
+
+# Maybe the GRAPH IN VIZUALIZATION LAB we did draw as our answer.
+
+# Answer questions (with graph and/or statistics):
+## ? What is the peak performing age for men? for women?
+## https://pubmed.ncbi.nlm.nih.gov/31174325/
+## ? What is the slow down rate after peak age of men? of women? (percent per decade? choose another unit of measurement if you find it's more accurate/intuitive) 
+
+## ? Who have lower age-related decline (percent per decade) in performance? elite runners or mortal (based on running time to decide who are elite runners or based on Cherry Blossom elite runners record)? men/women? -> recommendation to take up running as a hobby, professional training? https://www.frontiersin.org/articles/10.3389/fphys.2021.649282/full
+## actually, I think this should be done with the tracked runner record rather than cross-section data - will look into it. https://researchoutreach.org/articles/ageing-change-sport-performance-master-athletes-answer/
+  
+
+
+
+```
+
+```{r draftstuff1, eval=F}
+install.packages('rdrobust')
+library(rdrobust)
+rdplot(narrow$yvar, narrow$school_enrollment, c = 40.5, p = 
+1, nbins = 20)
+```
+
+```{r draftstuff2, eval=F}
+#Collapse data
+by_school <- group_by(narrow, schlcode)
+schools <- summarise(by_school, school_enrollment = 
+mean(school_enrollment, na.rm = TRUE))
+#Draw graph
+ggplot(schools, aes(school_enrollment)) +
+ geom_histogram(bins = 40) +
+ geom_vline(xintercept=40.5, color = "red") 
+#Save graph
+ggsave("school_counts.png")
+```
+
+```{r redundant, eval=F}
+{
+# Use PiS/Tis to create place in percentile
+## Extract position and total number of runners in each race
+allData <- allData %>%
+    mutate( race_size = sapply( strsplit( place, "/" ),
+        function(x) as.numeric(x[2]) ) ) %>%
+    mutate( place = sapply( strsplit( place, "/" ),
+        function(x) as.numeric(x[1]) ) )
+  
+    }
+
+```
+
