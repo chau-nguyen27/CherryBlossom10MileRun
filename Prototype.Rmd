@@ -177,6 +177,20 @@ plot(y=predict(model.loess.w), x=allData.w$age,
 ```
 
 ```{r draftstuff1, eval=F}
+resid.lo = loess(resids ~ age, data=data.frame(resids=rstandard(model),
+                                               age = allData$age))
+res.lo.pred=predict(resid.lo, newdata = data.frame(age=10:100))
+smoothScatter(x=allData$age, y=model$residuals,
+              xlab="Ages", ylab = "Residuals"); abline(h=0); lines (x=10:100,
+                                                                    y=res.lo.pred,
+                                                                    col="red",
+                                                                    lwd=2,
+                                                                    lty=3)
+
+```
+
+```{r}
+
 install.packages('rdrobust')
 library(rdrobust)
 rdplot(narrow$yvar, narrow$school_enrollment, c = 40.5, p = 
