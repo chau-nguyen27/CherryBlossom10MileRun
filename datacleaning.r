@@ -75,3 +75,5 @@ same_runners = cleaned %>%
   count(Name, Year-Age, Hometown, name = 'Races_Ran') %>% 
   arrange(desc(Races_Ran))
 
+write.csv(same_runners, "same_runners.csv", row.names = FALSE)
+
