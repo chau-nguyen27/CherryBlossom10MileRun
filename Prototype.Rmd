@@ -15,67 +15,14 @@ library(stringr)
 library(tidyr)
 library(ggplot2)
 
-# load("CBdata.1_10.RData") old data
+# load in cleaned data
 cleanData = read.csv(file = 'cleaned_data_csv.csv')
 runners = read.csv(file = 'same_runners.csv')
 
-# comnine all data into a single data frame
-allData_raw <- bind_rows(CBdata.1_10)
-
-# Split "gender" from "name" 
-allData <- allData_raw %>% 
-  mutate(gender = sapply(strsplit(allData_raw$Name, '[(]'),
-               function(x) str_sub(x[2],1,1))) %>% 
-  rename(name = Name) %>% 
-  mutate(name = str_sub(name,1,-5))
-
-## Fix 1 error when getting gender
-nrow(allData[allData$gender=="e",])
-allData_raw[6624,] # examinine the case
-allData <- allData %>% 
-  mutate(gender = case_when(gender=="e"~ "W",
-                            TRUE ~ gender))
-
-sum(is.na(allData$gender))
-View(allData[allData$gender=="e",])
-allData <- allData %>% filter(!is.na(Age)) %>% 
-  filter(!is.na(gender))
-
-# Time conversion to minute
-
-allData <- allData %>% 
-  mutate(time = sapply(sapply(strsplit(Time, ":"), as.numeric),
-                       function(x) {
-                         x[1]*60 + x[2] + x[3]/60
-                       }
-                       ))
-# Summary missing run time by year
-
-# head(allData[is.na(allData$time),],20)
-# {
-allData %>%
-  filter(is.na(time)) %>% 
-  group_by(Year) %>% 
-  summarize(
-    missing_time = n()
-  ) # all missing time are in 1977 (882/1587) and 1978 (1507/2064)
-
-
-c(nrow(allData[allData$Year==1977 & is.na(allData$time),]),"/",
-  nrow(allData[allData$Year==1977,]), " ; ",
-  nrow(allData[allData$Year==1978 & is.na(allData$time),]),"/",
-  nrow(allData[allData$Year==1978,]))
-
-
-# Keep age and place (PiS/TiS) information, filter runners 10 year or older, drop missing age observation
-allData <- allData %>%
-    rename( age = Age ) %>%
-    rename( place = "PiS/TiS" ) %>%
-    mutate( Race = substr( Race, 6, length(Race) ) ) %>%
-    filter( age != is.nan(age) ) %>%
-    filter( age >= 10 )                                     
-
-
+# converting Time/Pace into minutes and putting them in separate columns
+cleanData %>% 
+  mutate(Time = (T_Hour*60)+(T_Min)+(T_Sec/60),
+         Pace = (P_Min)+(P_Sec/60))
 ```
 
 ```{r}
