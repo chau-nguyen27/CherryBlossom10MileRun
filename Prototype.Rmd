@@ -17,6 +17,7 @@ library(ggplot2)
 
 # load("CBdata.1_10.RData") old data
 cleanData = read.csv(file = 'cleaned_data_csv.csv')
+runners = read.csv(file = 'same_runners.csv')
 
 # comnine all data into a single data frame
 allData_raw <- bind_rows(CBdata.1_10)
