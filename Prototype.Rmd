@@ -23,6 +23,37 @@ runners = read.csv(file = 'same_runners.csv')
 cleanData %>% 
   mutate(Time = (T_Hour*60)+(T_Min)+(T_Sec/60),
          Pace = (P_Min)+(P_Sec/60))
+
+## create gender column from Name
+getgender <- function(x){
+  substr(x, nchar(x)-1, nchar(x)-1)
+}
+
+runners$Name <- iconv(enc2utf8(runners$Name),sub="byte")
+runners <- runners %>% 
+  mutate(gender = sapply(Name, getgender)) %>% 
+  rename(name = Name) %>% 
+  mutate(name = str_sub(name,1,-5))
+
+unique(runners$gender) # 1 case F instead of W
+# View(runners[runners$gender=="F",])
+runners <- runners %>% 
+  mutate(gender = case_when(gender=="F" ~ "W",
+                            TRUE ~ gender))
+
+
+cleanData$Name <- iconv(enc2utf8(cleanData$Name),sub="byte")
+cleanData <- cleanData %>% 
+  mutate(gender = sapply(Name, getgender)) %>% 
+  rename(name = Name) %>% 
+  mutate(name = str_sub(name,1,-5))
+
+unique(cleanData$gender) # 1 case F instead of W
+# View(cleanData[cleanData$gender=="F",])
+cleanData <- cleanData %>% 
+  mutate(gender = case_when(gender=="F" ~ "W",
+                            TRUE ~ gender))
+
 ```
 
 ```{r}
@@ -121,6 +152,9 @@ plot(y=predict(model.loess.w), x=allData.w$age,
 
 ```{r further_analysis}
 # MODEL FOR TRACKED RUNNERS RECORDS
+
+
+hist(runners$Races_Ran)
 # QUESTIONS
 ## ? Who have lower age-related decline (percent per decade) in performance? elite runners or mortal (based on running time to decide who are elite runners or based on Cherry Blossom elite runners record)? men/women? -> recommendation to take up running as a hobby, professional training? https://www.frontiersin.org/articles/10.3389/fphys.2021.649282/full
 ## actually, I think this should be done with the tracked runner record rather than cross-section data - will look into it. https://researchoutreach.org/articles/ageing-change-sport-performance-master-athletes-answer/
@@ -130,7 +164,7 @@ plot(y=predict(model.loess.w), x=allData.w$age,
 
 ```
 
-```{r draftstuff1, eval=F}
+```{r}
 resid.lo = loess(resids ~ age, data=data.frame(resids=rstandard(model),
                                                age = allData$age))
 res.lo.pred=predict(resid.lo, newdata = data.frame(age=10:100))
@@ -143,7 +177,7 @@ smoothScatter(x=allData$age, y=model$residuals,
 
 ```
 
-```{r}
+```{r draftstuff1, eval=F}
 
 install.packages('rdrobust')
 library(rdrobust)
