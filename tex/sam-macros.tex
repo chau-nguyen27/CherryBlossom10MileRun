@@ -1,0 +1,103 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Equation Environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\eqn[1]{
+	\begin{align*}
+		#1
+	\end{align*}
+}
+
+\newcommand\labeqn[1]{
+	\begin{align}
+		#1
+	\end{align}
+}
+
+\newcommand\bracegroup[1]{
+	\left\{
+	\begin{aligned}
+		#1
+	\end{aligned}
+\right.}
+
+\newcommand\bracketgroup[1]{
+	\left[
+	\begin{aligned}
+		#1
+	\end{aligned}
+\right.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Text Fonts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\tbf{\textbf}		% text bold
+\newcommand\mono{\texttt}		% fixed width
+\newcommand\ul{\underline}		% underlined
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math Fonts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand\bf{\boldsymbol} 	% math bold
+\newcommand\bb{\mathbb} 		% blackboard bold
+\renewcommand\cal{\mathcal}		% calligraphic
+\renewcommand\bar{\overline}	% overline
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Special Letters and Symbols
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\ii}{\mathfrak{i}} 	% complex i
+\newcommand{\eps}{\varepsilon}	% curvy epsilon
+\newcommand{\phii}{\varphi} 	% curvy phi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Brackets, Braces, and Bars
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\DeclarePairedDelimiter{\paren}{ ( }{ ) }			% parentheses
+\DeclarePairedDelimiter{\bracket}{ [ }{ ] }			% square brackets
+\DeclarePairedDelimiter{\curly}{ \{ }{ \} }			% curly braces
+\DeclarePairedDelimiter{\abs}{|}{|}					% absolute value
+\DeclarePairedDelimiter{\norm}{\|}{\|}				% norm
+\DeclarePairedDelimiter{\ip}{\langle}{\rangle}		% inner product
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil} 		% ceiling
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor} 	% floor
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sets
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\nada}{\varnothing} % empty set
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Algebra
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\inv{^{-1}} % inverse
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Matrices
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\pmat}[1]{\begin{pmatrix}#1\end{pmatrix}} % soft
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}} % hard
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Linear Algebra
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand\t{^\intercal} 			% transpose
+\newcommand\spn{\operatorname{span}} 	% span
+\newcommand\range{\operatorname{range}}	% range
+\newcommand\nul{\operatorname{null}} 	% null space
+\newcommand\rank{\operatorname{rank}} 	% rank
+\newcommand\trace{\operatorname{tr}} 	% trace
+\newcommand\diag{\operatorname{diag}}	% diagonal
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Calculus
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand\div{\text{div}\;}
+\newcommand\curl{\text{curl}\;}
