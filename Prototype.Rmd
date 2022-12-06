@@ -868,6 +868,7 @@ ggplot(data = rerun %>% filter(!is.na(run_type2), age>=10)
 ```
 
 
+
 ## Peak age and peak performance
 
 Under observation that maximal oxygen uptake—a main correlate of running speed—varied in an inverse U trend across life-time (Rate and mechanism of maximal oxygen consumption decline with aging:
