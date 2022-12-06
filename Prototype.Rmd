@@ -105,7 +105,7 @@ df <- df %>%
     mutate(agecat = 10 * floor(age / 10)) %>%
     mutate(agecat = as.character(agecat))
 
-ggplot(data = df %>% 
+ggplot(data = df %>%
          mutate(gender=case_when(
            gender=="M" ~ "Men",
            gender=="W" ~ "Women"
@@ -203,48 +203,30 @@ df.w <- df[df$gender == "W",]
 
 # temporary dataframe
 temp <- df %>%
-  select(year, age) %>%
+  select(year, age, gender) %>%
   mutate(age = as.character(10 * floor(age / 10)))
 
-# age_labels <- c(
-#     "<10",
-#     "10-19",
-#     "20-29",
-#     "30-39",
-#     "40-49",
-#     "50-59",
-#     "60-69",
-#     "70-79",
-#     "80-89",
-#     ">89"
-#     )
-
-# stacked line plot showing age distribution for year
-ggplot(temp,
-  aes(x = year,
-    group = age,
-    fill = age)) +
-  geom_bar() +
-  ggtitle("Age distribution of participants") +
+  # stacked line plot showing age distribution for year
+ggplot() +
+  geom_bar(data = temp,
+    aes(x = year, fill = age, group = age)) +
   xlab("Year") +
-  ylab("Number of participants")
+  ylab("Count") +
+  facet_wrap(. ~ gender)
 
-# show proportions for each year
-ggplot(temp,
-  aes(x = year,
-    group = age,
-    fill = age)) +
-  geom_bar(position = "fill") +
-  ggtitle("Age distribution of participants") +
-  xlab("Year") +
-  ylab("Proportion of participants (%)")
+# not sure if this is what we are looking for...
 
-# statistics of number of participants for each year
-temp <- df %>%
-  select(year, age) %>%
-  group_by(year)
-summarise(temp)
+year_age_summary <- temp %>% group_by(year, gender) %>% summarise(n = n())
 
+# show mean, median, min, max of number of observations per year
+summary(year_age_summary)
+
+# show breakdown by year
+as.data.frame(year_age_summary)
+
+# show breakdown by gender
+year_age_summary <- temp %>% group_by(gender, year) %>% summarise(n = n())
+as.data.frame(year_age_summary)
 ```
 
 Model using panel data may mitigate omitted variable bias when there is no information on variables that correlate with both the regressors of interest and the independent variable and if these variables are constant in the time dimension or across entities.
@@ -266,7 +248,7 @@ df <- df %>% mutate(year_of_birth=year-age)
 
 # create ID for each runner in repeat runner list
 rerun <- repeat_runners %>%
-  mutate(id=row_number()) %>% 
+  mutate(id=row_number()) %>%
   select(id, name:gender)
 
 ## Filter those who ran at least 5 races
@@ -276,21 +258,21 @@ rerun <- rerun %>% filter(races>=5)
 rerun <- rerun %>% left_join(y = df,by = c("name","year_of_birth","gender","hometown"))
 
 check_merge <- rerun %>% # number of races not agree with number of records (maybe due to change of hometown)
-  group_by(id) %>% 
+  group_by(id) %>%
   summarise(n_races=mean(races),
-            n_merge=n()) %>% 
+            n_merge=n()) %>%
   filter(n_races != n_merge)
 
 rerun_dup <- rerun %>% # multiple people with same id (name, yob, gender, hometown) and different performance
-  group_by(id,year) %>% 
-  mutate(n_dup=n()) %>% 
+  group_by(id,year) %>%
+  mutate(n_dup=n()) %>%
   filter(n_dup>1)
 
 # remove merging error
 rerun <- rerun %>%
-  group_by(id,year) %>% 
-  mutate(n_dup=n()) %>% 
-  filter(n_dup==1) %>% 
+  group_by(id,year) %>%
+  mutate(n_dup=n()) %>%
+  filter(n_dup==1) %>%
   select(-n_dup)
 
 ## Random sampling
@@ -307,12 +289,12 @@ head(rerun)
 
 ## Panel data graph for first 10 runners
 
-ggplot(data = rerun %>% 
-         filter(as.numeric(id)<11) %>% 
+ggplot(data = rerun %>%
+         filter(as.numeric(id)<11) %>%
          mutate(gender = case_when(
            gender=="M"~"Men",
            gender=="W"~"Women"
-         )), 
+         )),
        aes(x = age, y = time, group = id)) +
   geom_line(aes(color=id)) + # line graph
   xlab("Age (in years)") +
@@ -321,12 +303,12 @@ ggplot(data = rerun %>%
   theme(legend.position="none")
 
 ## Panel data graph for first 50 runners by gender
-ggplot(data = rerun %>% 
-         filter(as.numeric(id)<51) %>% 
+ggplot(data = rerun %>%
+         filter(as.numeric(id)<51) %>%
          mutate(gender = case_when(
            gender=="M"~"Men",
            gender=="W"~"Women"
-         )), 
+         )),
        aes(x = age, y = time, group = id)) +
   geom_line(aes(color=id)) + # line graph
   xlab("Age (in years)") +
@@ -337,12 +319,12 @@ ggplot(data = rerun %>%
   stat_summary(group= F, geom="line", fun = "mean", color="black", size=1, linetype="solid")
 
 ## Panel data graph for first 50 runners by gender with smooth line
-ggplot(data = rerun %>% 
-         filter(as.numeric(id)<51) %>% 
+ggplot(data = rerun %>%
+         filter(as.numeric(id)<51) %>%
          mutate(gender = case_when(
            gender=="M"~"Men",
            gender=="W"~"Women"
-         )), 
+         )),
        aes(x = age, y = time, group = id)) +
   geom_line(aes(color=id)) + # line graph
   xlab("Age (in years)") +
@@ -362,7 +344,7 @@ Based on the average line and Loess smooth line, two possible models are linear 
 
 ### Linear model
 model.panel_l <- plm(time~age + gender+age:gender,
-                   data = rerun %>% 
+                   data = rerun %>%
                      mutate(gender= case_when(
                        gender=="M" ~ "Men",
                        gender=="W" ~ "Women"
@@ -375,8 +357,8 @@ coeftest(model.panel_l, vcov. = vcovHC, type = "HC1")
 ### Quadratic model
 model.panel_q <- plm(time~ age + age2 + gender
                      + age:gender + age2:gender,
-                   data = rerun %>% 
-                     mutate(age2 = age^2) %>% 
+                   data = rerun %>%
+                     mutate(age2 = age^2) %>%
                      mutate(gender= case_when(
                        gender=="M" ~ "Men",
                        gender=="W" ~ "Women"
@@ -421,7 +403,7 @@ lambda = boxcoxResult$x[which.max(boxcoxResult$y)];lambda
 
 model.panel_l <- plm(log_time~age + gender+age:gender,
                    data = rerun %>%
-                     mutate(log_time=log(time)) %>% 
+                     mutate(log_time=log(time)) %>%
                      mutate(gender= case_when(
                        gender=="M" ~ "Men",
                        gender=="W" ~ "Women"
@@ -442,15 +424,15 @@ pred_log <- function(data, model) {
   data$pred_time = exp(predict(model)); data
 }
 pred_log(rerun, model = model.panel_l)
-ggplot(data = pred_log(rerun, model.panel_l) %>% 
-         filter(age>=10), 
+ggplot(data = pred_log(rerun, model.panel_l) %>%
+         filter(age>=10),
        aes(x = age, y = time, group = id)) +
   geom_line(aes(color=id)) + # line graph
   xlab("Age") +
   ylab("Race time") +
   ggtitle("Running time of tracked runners throughout races predicted") +
-  labs(title = "Predicted running time of tracked runners throughout races", 
-       subtitle = "Log-level time-fixed effect model", 
+  labs(title = "Predicted running time of tracked runners throughout races",
+       subtitle = "Log-level time-fixed effect model",
        caption = "") +
   theme(legend.position="none") +
   # geom_abline(slope=model.panel_t1$coefficients[1],
@@ -474,7 +456,7 @@ Final model (log-level model) using log-transformed racing time:
 ``` {r panel_male}
 model.panel_l_m <- plm(time~age,
                    data = rerun %>%
-                     filter(gender=="M") %>% 
+                     filter(gender=="M") %>%
                      mutate(gender= case_when(
                        gender=="M" ~ "Men",
                        gender=="W" ~ "Women"
@@ -486,9 +468,9 @@ coeftest(model.panel_l_m, vcov. = vcovHC, type = "HC1")
 
 ### Quadratic model
 model.panel_q_m <- plm(time~ age + age2,
-                   data = rerun %>% 
-                     filter(gender=="M") %>% 
-                     mutate(age2 = age^2) %>% 
+                   data = rerun %>%
+                     filter(gender=="M") %>%
+                     mutate(age2 = age^2) %>%
                      mutate(gender= case_when(
                        gender=="M" ~ "Men",
                        gender=="W" ~ "Women"
@@ -543,13 +525,13 @@ rerun <- rerun %>%
 rerun <- rerun %>%
   mutate(percentile = 10 * ceiling( 10 * place/race_size))
 
-rerun <- rerun %>% 
-  group_by(id) %>% 
+rerun <- rerun %>%
+  group_by(id) %>%
   mutate(avg_time = mean(time),
          avg_performance = mean(percentile))
 
-rerun_type <- rerun %>% 
-  group_by(id, name, races, year_of_birth, gender) %>% 
+rerun_type <- rerun %>%
+  group_by(id, name, races, year_of_birth, gender) %>%
   summarise(avg_time = mean(time),
          avg_performance = mean(percentile))
 
@@ -561,7 +543,7 @@ bounds1 <- c(0, 60)
 bounds2 <- c(80,90)
 bounds3 <- c(110,160)
 
-ggplot(rerun_type, aes(x=avg_time))  + 
+ggplot(rerun_type, aes(x=avg_time))  +
   stat_density(geom = "line") +
   stat_density(
     geom = "area",
@@ -582,17 +564,17 @@ ggplot(rerun_type, aes(x=avg_time))  +
   ylab("Density") +
   ggtitle("Distribution of average running time") +
   annotate(
-    "text", bounds1[2]-5, y = 0.003, 
+    "text", bounds1[2]-5, y = 0.003,
     label = percent(mean(!is.na(oob_censor(rerun_type$avg_time, bounds1)))))+
   annotate(
-    "text", bounds2[2]-5, y = 0.003, 
+    "text", bounds2[2]-5, y = 0.003,
     label = percent(mean(!is.na(oob_censor(rerun_type$avg_time, bounds2)))))+
   annotate(
-    "text", bounds3[2]-25, y = 0.003, 
+    "text", bounds3[2]-25, y = 0.003,
     label = percent(mean(!is.na(oob_censor(rerun_type$avg_time, bounds3))))
   )
 
-## base on this plot -> 
+## base on this plot ->
 ## 1. elite = complete the race no more than 60 minutes
 ## 2. complete the race in between 80-90 minutes
 ## 3. complete the race in more than 110 minutes
@@ -603,7 +585,7 @@ densityPlot(rerun_type[rerun_type$avg_time<=60,]$races) # elite runners may not 
 
 
 ```{r elite_vs_nonelite}
-rerun_type <- rerun_type %>% 
+rerun_type <- rerun_type %>%
   mutate(run_type=as.factor(case_when(
     avg_time<=60 ~ 1,
     avg_time>=80 & avg_time<=90 ~ 2,
@@ -612,12 +594,12 @@ rerun_type <- rerun_type %>%
 
 ## Check how many people in each type of runners
 
-rerun_type %>% 
-  group_by(run_type, gender) %>% 
+rerun_type %>%
+  group_by(run_type, gender) %>%
   summarise(num_runners=n())
 
 ## Merge back the type to the performance across years dataset
-rerun <- rerun %>% left_join(y=rerun_type %>% 
+rerun <- rerun %>% left_join(y=rerun_type %>%
                                select(-avg_time,-avg_performance),
                              by = c("id", "name", "races",
                                     "year_of_birth", "gender"))
@@ -631,9 +613,9 @@ rerun <- rerun %>% left_join(y=rerun_type %>%
 #                                   index=c("id", "year"),
 #                                   model = "within",
 #                                   effect = "time")
-#   }) 
-# sapply(list.panel_bytype, 
-#        function(x) print(coeftest(x, vcov. = vcovHC, type = "HC1" )))                            
+#   })
+# sapply(list.panel_bytype,
+#        function(x) print(coeftest(x, vcov. = vcovHC, type = "HC1" )))
 
 model.panel_t1 <- plm(time~age+gender+gender:age,
                    data = rerun %>% filter(run_type==1, age>=10),
@@ -671,8 +653,8 @@ Again, type 1 are fastest group, type 3 are the slowest group. Based on this res
 
 ```{r elite_vs_nonelite_gr}
 ## Panel data graph for type-1,2,3 runners by gender with smooth line
-ggplot(data = rerun %>% 
-         filter(run_type==1, age>=10) %>% 
+ggplot(data = rerun %>%
+         filter(run_type==1, age>=10) %>%
          mutate(gender=case_when(
            gender=="M" ~ "Men",
            gender=="W" ~ "Women")),
@@ -688,8 +670,8 @@ ggplot(data = rerun %>%
   #             color='red') +
   geom_smooth(group= F, method = "loess", fill = NA)
 
-ggplot(data = rerun %>% 
-         filter(run_type==2, age>=10) %>% 
+ggplot(data = rerun %>%
+         filter(run_type==2, age>=10) %>%
          mutate(gender=case_when(
            gender=="M" ~ "Men",
            gender=="W" ~ "Women")),
@@ -705,8 +687,8 @@ ggplot(data = rerun %>%
   #             color='red') +
   geom_smooth(group= F, method = "loess", fill = NA)
 
-ggplot(data = rerun %>% 
-         filter(run_type==3, age>=10) %>% 
+ggplot(data = rerun %>%
+         filter(run_type==3, age>=10) %>%
          mutate(gender=case_when(
            gender=="M" ~ "Men",
            gender=="W" ~ "Women")),
@@ -800,17 +782,17 @@ model.panel_pa <- plm(time~age+age2+gender,
                       method="within",
                       effect = "time")
 model.panel_pa <- lm(time ~ age + age2 + gender + year,
-               data = rerun %>% 
-                        mutate(age2=age^2) %>% 
+               data = rerun %>%
+                        mutate(age2=age^2) %>%
                         filter(age>=10))
 summary(model.panel_pa)
 model.panel_pa_m <- lm(time ~ age + age2 + year,
-               data = rerun %>% 
-                        mutate(age2=age^2) %>% 
+               data = rerun %>%
+                        mutate(age2=age^2) %>%
                         filter(age>=10, gender=="M"))
 model.panel_pa_w <- lm(time ~ age + age2 + year,
-               data = rerun %>% 
-                        mutate(age2=age^2) %>% 
+               data = rerun %>%
+                        mutate(age2=age^2) %>%
                         filter(age>=10, gender=="W"))
 # peak age = x* = -b/2a
 pa_m <- -summary(model.panel_pa_m)$coefficients[2,1]/(2*summary(model.panel_pa_m)$coefficients[3,1]); pa_m
@@ -827,12 +809,12 @@ From the record of tracked runners, filtered people at least 10 years old, using
 # Plot
 
 model.panel_pa_m <- lm(time ~ age + age2,
-               data = rerun %>% 
-                        mutate(age2=age^2) %>% 
+               data = rerun %>%
+                        mutate(age2=age^2) %>%
                         filter(age>=10, gender=="M"))
 model.panel_pa_w <- lm(time ~ age + age2,
-               data = rerun %>% 
-                        mutate(age2=age^2) %>% 
+               data = rerun %>%
+                        mutate(age2=age^2) %>%
                         filter(age>=10, gender=="W"))
 
 summary(model.panel_pa_m)
@@ -855,7 +837,7 @@ ggplot(data = rerun %>% filter(age>=10, gender=="M")
        %>% mutate(gender=case_when(
          gender=="M" ~ "Men",
          gender=="W" ~ "Women"
-       )), 
+       )),
        aes(x = age, y = time, group = id)) +
   geom_line(aes(color=id)) + # line graph
   xlab("Age") +
