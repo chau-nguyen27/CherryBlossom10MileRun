@@ -264,10 +264,14 @@ temp <- df %>%
 
   # stacked line plot showing age distribution for year
 ggplot() +
-  geom_bar(data = temp,
+  geom_bar(data = temp %>%
+    mutate(gender = case_when(
+      gender == "M" ~ "Men",
+      gender == "W" ~ "Women")),
     aes(x = year, fill = age, group = age)) +
   xlab("Year") +
   ylab("Count") +
+  labs(title = "Age distribution of participants by year and gender") +
   facet_wrap(. ~ gender)
 ```
 
@@ -627,11 +631,6 @@ ggplot(data = rerun %>%
   facet_grid(.~ gender) +
   theme(legend.position="none") +
   stat_summary(group= F, geom="line", fun = "mean", color="black", size=1, linetype="solid")
-```
-
-```
-## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## ℹ Please use `linewidth` instead.
 ```
 
 ![plot of chunk overview_tracked_runners](figure/overview_tracked_runners-3.png)
@@ -1050,10 +1049,10 @@ ggplot(rerun_type, aes(x=avg_time))  +
     "text", bounds1[2]-5, y = 0.003,
     label = percent(mean(!is.na(oob_censor(rerun_type$avg_time, bounds1)))))+
   annotate(
-    "text", bounds2[2]-3, y = 0.003, 
+    "text", bounds2[2]-3, y = 0.003,
     label = percent(mean(!is.na(oob_censor(rerun_type$avg_time, bounds2)))))+
   annotate(
-    "text", bounds3[2]-50, y = 0.003, 
+    "text", bounds3[2]-50, y = 0.003,
     label = percent(mean(!is.na(oob_censor(rerun_type$avg_time, bounds3))))
   )
 ```
@@ -1346,14 +1345,14 @@ Another categorization of runner type is by percentile within sex
 
 
 ```r
-quintile <- rerun_type %>% 
-  group_by(gender) %>% 
+quintile <- rerun_type %>%
+  group_by(gender) %>%
   summarise(qt1=quantile(avg_time, probs = c(0.2)),
             qt2=quantile(avg_time, probs = c(0.4)),
             qt3=quantile(avg_time, probs = c(0.6)),
             qt4=quantile(avg_time, probs = c(0.8)))
 
-quintile[1,2] 
+quintile[1,2]
 ```
 
 ```
@@ -1364,7 +1363,7 @@ quintile[1,2]
 ```
 
 ```r
-rerun_type <- rerun_type %>% 
+rerun_type <- rerun_type %>%
   mutate(run_type2=case_when(
     gender=="M" & avg_time<=quintile[1,"qt1"] ~ 1,
     gender=="M" & avg_time>=quintile[1,"qt2"] & avg_time<=quintile[1,"qt3"] ~ 2,
@@ -1377,8 +1376,8 @@ rerun_type <- rerun_type %>%
 
 ## Check how many people in each type of runners
 
-rerun_type %>% 
-  group_by(run_type2, gender) %>% 
+rerun_type %>%
+  group_by(run_type2, gender) %>%
   summarise(num_runners=n())
 ```
 
@@ -1404,7 +1403,7 @@ rerun_type %>%
 
 ```r
 ## Merge back the type to the performance across years dataset
-rerun <- rerun %>% left_join(y=rerun_type %>% 
+rerun <- rerun %>% left_join(y=rerun_type %>%
                                select(-avg_time,-avg_performance),
                              by = c("id", "name", "races",
                                     "year_of_birth", "gender"))
@@ -1418,9 +1417,9 @@ rerun <- rerun %>% left_join(y=rerun_type %>%
 #                                   index=c("id", "year"),
 #                                   model = "within",
 #                                   effect = "time")
-#   }) 
-# sapply(list.panel_bytype, 
-#        function(x) print(coeftest(x, vcov. = vcovHC, type = "HC1" )))                            
+#   })
+# sapply(list.panel_bytype,
+#        function(x) print(coeftest(x, vcov. = vcovHC, type = "HC1" )))
 
 model.panel_t1 <- plm(time~age+gender+gender:age,
                    data = rerun %>% filter(run_type2==1, age>=10),
