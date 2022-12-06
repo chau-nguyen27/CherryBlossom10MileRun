@@ -557,9 +557,9 @@ densityPlot(rerun_type$avg_time, xlab = "Average running time"); title("Distribu
 
 library(scales)
 
-bounds1 <- c(0, 60)
-bounds2 <- c(80,90)
-bounds3 <- c(110,160)
+bounds1 <- c(0, quantile(rerun_type$avg_time, probs = 0.2))
+bounds2 <- c(quantile(rerun_type$avg_time, probs = 0.4), quantile(rerun_type$avg_time, probs = 0.6))
+bounds3 <- c(quantile(rerun_type$avg_time, probs = 0.8),160)
 
 ggplot(rerun_type, aes(x=avg_time))  + 
   stat_density(geom = "line") +
@@ -585,10 +585,10 @@ ggplot(rerun_type, aes(x=avg_time))  +
     "text", bounds1[2]-5, y = 0.003, 
     label = percent(mean(!is.na(oob_censor(rerun_type$avg_time, bounds1)))))+
   annotate(
-    "text", bounds2[2]-5, y = 0.003, 
+    "text", bounds2[2]-3, y = 0.003, 
     label = percent(mean(!is.na(oob_censor(rerun_type$avg_time, bounds2)))))+
   annotate(
-    "text", bounds3[2]-25, y = 0.003, 
+    "text", bounds3[2]-50, y = 0.003, 
     label = percent(mean(!is.na(oob_censor(rerun_type$avg_time, bounds3))))
   )
 
@@ -842,6 +842,7 @@ The result from regression model suggest that:
 
 
 ```{r run_type2_gr}
+
 ## all-in-one graph
 ggplot(data = rerun %>% filter(!is.na(run_type2), age>=10)
        %>% mutate(run_type=case_when(
