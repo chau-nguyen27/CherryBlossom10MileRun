@@ -1,0 +1,174 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{beamer}
+\mode<presentation>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TITLE FRAME
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% TITLE
+%%%%%%%%%%%%%%%%%%%%%%%
+\title[
+	Cherry Blossom
+]{
+	Age-dependent Athletic Performance in the
+	Cherry Blossom 10-mile Run Data
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% AUTHORS
+%%%%%%%%%%%%%%%%%%%%%%%
+\author[S. Reynolds]{
+	\large{
+		Quan Dang,\inst{1}
+		Chau Nguyen,\inst{1}
+		Sam Reynolds\inst{1}
+	}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% INSTITUTIONS
+%%%%%%%%%%%%%%%%%%%%%%%
+\institute[PSU]{
+	\inst{1}
+	Portland State University, Portland, Oregon
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% VENUE
+%%%%%%%%%%%%%%%%%%%%%%%
+\date[STAT 510]{
+	STAT 510: Basic Statistical Consulting
+	\\[3mm]
+	December 6, 2022
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PACKAGES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% package for projects with multiple files
+\usepackage{subfiles}
+
+% formatting packages
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+% symbol packages
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+% additional packages
+\usepackage{graphicx}
+% \usepackage{tikz}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FORMATTING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% colors
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+\setbeamercolor*{title}{parent=palette primary}
+\setbeamercolor*{frametitle}{parent=palette primary,fg=white}
+\setbeamertemplate{blocks}[rounded][shadow=true]
+
+% fonts
+\usefonttheme[onlymath]{serif}
+
+% bullet list style
+\setbeamertemplate{itemize items}[circle]
+
+% bibliography style
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREM ENVIRONMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\theoremstyle{definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{dfn}{Definition}
+\newtheorem{prop}{Propositon}
+
+\theoremstyle{remark}
+\newtheorem{rmk}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MACROS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{../tex/sam-macros.tex}
+
+% Additional macros
+
+\newcommand{\foo}{\texttt{yourwishismycommand}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% BODY
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+% set slide number for title slide to zero
+\addtocounter{framenumber}{-1}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+
+	\frametitle{Introduction}
+
+	\begin{columns}
+
+		\begin{column}{0.6\textwidth}
+			\textbf{some things}
+			\begin{itemize}
+				\item a thing i want to talk about
+				\item a thing i will forget to mention
+			\end{itemize}
+			\begin{block}{Test custom command}
+				Here we go: \foo
+			\end{block}
+			\begin{alertblock}{O. G. Whizz}
+				alertblock!
+			\end{alertblock}
+		\end{column}
+
+		\begin{column}{0.4\textwidth}
+			\begin{center}
+				\includegraphics[width=0.9\linewidth]
+				{../figure/boxplot_runtime_age-1.png}
+			\end{center}
+		\end{column}
+
+	\end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+	\frametitle{References}
+
+	{\footnotesize
+	\begin{thebibliography}{99}
+
+	\bibitem{Ramsay2022}
+	G. Fieri and G. Ramsay,
+	``Necessary and sufficient conditions for cereal to be a soup,''
+	AMS Journal of Culinary Theory (2022), vol. 69(2), pp. 337--379.
+	\\DOI: \url{https://doi.org/10.1234/56789012345}.
+
+	\end{thebibliography}
+	}
+
+\end{frame}
+
+\end{document}

@@ -7,22 +7,27 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
-# include libraries
-library(dplyr)
-library(stringr)
-library(tidyr)
-library(ggplot2)
-library(rdrobust)
 ```
 
-```{r}
+```{r library_inclusions, results = 'hide'}
+# library inclusions
+require(dplyr)
+require(stringr)
+require(tidyr)
+require(ggplot2)
+require(rdrobust)
+require(AER)
+require(plm)
+require(stargazer)
+```
+
+```{r import_data}
 # load in cleaned data
 df <- read.csv(file = "cleaned_data_csv.csv")
 repeat_runners <- read.csv(file = "same_runners.csv")
 ```
 
-```{r}
+```{r rename_variables}
 # renaming variables for convenience and consistency
 df <- df %>%
   rename(year = Year) %>%
@@ -44,7 +49,7 @@ repeat_runners <- repeat_runners %>%
   rename(races = Races_Ran)
 ```
 
-```{r}
+```{r unit_conversion_and_gender_identification}
 # converting Time/Pace into minutes and putting them in separate columns
 df <- df %>%
   mutate(time = t_hour * 60 + t_min + t_sec / 60,
@@ -79,7 +84,7 @@ df <- df %>%
 
 ```
 
-```{r}
+```{r scatter_runtime_age}
 # Plot "runtime" against "age"
 ggplot(data = df,
        aes(x = age,
@@ -93,7 +98,7 @@ ggplot(data = df,
 ```
 
 
-```{r}
+```{r boxplot_runtime_age}
 # Boxplot runtime against age category, by gender
 ## Create age group by decade
 df <- df %>%
@@ -111,7 +116,7 @@ ggplot(data = df,
   facet_wrap(gender ~ .)
 ```
 
-```{r}
+```{r linear_regression}
 # Linear regression
 df <- df %>%
   filter(!is.na(time))
@@ -120,7 +125,7 @@ summary(model)
 ```
 
 
-```{r}
+```{r residual_diagnostic}
 # Residual diagnostic
 plot(fitted(model), rstandard(model)); abline(0, 0) # residual pattern against fitted response
 qqnorm(rstandard(model)); qqline(rstandard(model)) # normality of residual
@@ -149,7 +154,7 @@ smoothScatter(x = df$age,
 ```
 
 
-```{r}
+```{r nonparametric_model}
 # Non parametric model
 df.m <- df[df$gender == "M",]
 df.w <- df[df$gender == "W",]
@@ -191,12 +196,58 @@ df.w <- df[df$gender == "W",]
 # ? What is the slow down rate after peak age of men? of women? (percent per
 # decade? choose another unit of measurement if you find it"s more
 # accurate/intuitive)
+
+# temporary dataframe
+temp <- df %>%
+  select(year, age) %>%
+  mutate(age = as.character(10 * floor(age / 10)))
+
+# age_labels <- c(
+#     "<10",
+#     "10-19",
+#     "20-29",
+#     "30-39",
+#     "40-49",
+#     "50-59",
+#     "60-69",
+#     "70-79",
+#     "80-89",
+#     ">89"
+#     )
+
+# stacked line plot showing age distribution for year
+ggplot(temp,
+  aes(x = year,
+    group = age,
+    fill = age)) +
+  geom_bar() +
+  ggtitle("Age distribution of participants") +
+  xlab("Year") +
+  ylab("Number of participants")
+
+# show proportions for each year
+ggplot(temp,
+  aes(x = year,
+    group = age,
+    fill = age)) +
+  geom_bar(position = "fill") +
+  ggtitle("Age distribution of participants") +
+  xlab("Year") +
+  ylab("Proportion of participants (%)")
+
+# statistics of number of participants for each year
+temp <- df %>%
+  select(year, age) %>%
+  group_by(year)
+summarise(temp)
+
 ```
 
 Model using panel data may mitigate omitted variable bias when there is no information on variables that correlate with both the regressors of interest and the independent variable and if these variables are constant in the time dimension or across entities.
 
 ```{r overview_tracked_runners}
 # MODEL FOR TRACKED RUNNERS RECORDS
+
 # install.packages("plm")
 # install.packages("stargazer")
 # install.packages("AER")
@@ -374,11 +425,13 @@ model.panel_l <- plm(log_time~age + gender+age:gender,
                    index=c("id", "year"),
                    model = "within",
                    effect = "time")
+
 coeftest(model.panel_l, vcov. = vcovHC, type = "HC1")
 model.panel_l$coefficients
 
 
 ```
+
 ```{r graph_logtime, eval=F}
 # generate predict function
 pred_log <- function(data, model) {
@@ -483,6 +536,7 @@ rerun <- rerun %>%
   filter(place <= race_size) # discard data errors
 rerun <- rerun %>%
   mutate(percentile = 10 * ceiling( 10 * place/race_size))
+
 rerun <- rerun %>% 
   group_by(id) %>% 
   mutate(avg_time = mean(time),
@@ -502,6 +556,7 @@ densityPlot(rerun_type$avg_time)
 densityPlot(rerun_type[rerun_type$avg_time<=60,]$avg_performance)
 densityPlot(rerun_type[rerun_type$avg_time<=60,]$races) # elite runners may not participate in many races
 
+
 rerun_type <- rerun_type %>% 
   mutate(run_type=as.factor(case_when(
     avg_time<=60 ~ 1,
@@ -510,6 +565,7 @@ rerun_type <- rerun_type %>%
   )))
 
 ## Check how many people in each type of runners
+
 rerun_type %>% 
   group_by(run_type) %>% 
   summarise(num_runners=n())
@@ -521,7 +577,7 @@ rerun <- rerun %>% left_join(y=rerun_type %>%
                                     "year_of_birth", "gender"))
 
 ## Regress Time running on age for each group
-# list.panel_bytype <- lapply(1:3, 
+# list.panel_bytype <- lapply(1:3,
 #                             function(i) {
 #                               plm(time~age+gender,
 #                                   data = rerun %>%
@@ -569,7 +625,11 @@ Again, type 1 are fastest group, type 3 are the slowest group. Based on this res
 
 ```{r elite_vs_nonelite_gr}
 ## Panel data graph for type-1,2,3 runners by gender with smooth line
-ggplot(data = rerun %>% filter(run_type==1, age>=10), 
+ggplot(data = rerun %>% 
+         filter(run_type==1, age>=10) %>% 
+         mutate(gender=case_when(
+           gender=="M" ~ "Men",
+           gender=="W" ~ "Women")),
        aes(x = age, y = time, group = id)) +
   geom_line(aes(color=id)) + # line graph
   xlab("Age") +
@@ -582,7 +642,11 @@ ggplot(data = rerun %>% filter(run_type==1, age>=10),
   #             color='red') +
   geom_smooth(group= F, method = "loess", fill = NA)
 
-ggplot(data = rerun %>% filter(run_type==2, age>=10), 
+ggplot(data = rerun %>% 
+         filter(run_type==2, age>=10) %>% 
+         mutate(gender=case_when(
+           gender=="M" ~ "Men",
+           gender=="W" ~ "Women")),
        aes(x = age, y = time, group = id)) +
   geom_line(aes(color=id)) + # line graph
   xlab("Age") +
@@ -595,7 +659,11 @@ ggplot(data = rerun %>% filter(run_type==2, age>=10),
   #             color='red') +
   geom_smooth(group= F, method = "loess", fill = NA)
 
-ggplot(data = rerun %>% filter(run_type==3, age>=10), 
+ggplot(data = rerun %>% 
+         filter(run_type==3, age>=10) %>% 
+         mutate(gender=case_when(
+           gender=="M" ~ "Men",
+           gender=="W" ~ "Women")),
        aes(x = age, y = time, group = id)) +
   geom_line(aes(color=id)) + # line graph
   xlab("Age") +
@@ -618,7 +686,7 @@ ggplot(data = rerun %>% filter(!is.na(run_type), age>=10)
        %>% mutate(gender=case_when(
          gender=="M" ~ "Men",
          gender=="W" ~ "Women"
-       )), 
+       )),
        aes(x = age, y = time, group = id)) +
   geom_line(aes(color=id)) + # line graph
   xlab("Age") +
@@ -632,20 +700,7 @@ ggplot(data = rerun %>% filter(!is.na(run_type), age>=10)
   #             color='red') +
   geom_smooth(group= F, method = "loess", fill = NA)
 
-# addrunner <- function(listrunners, color, numlty) {
-#   numrunners = length(listrunners)
-#   colindx = 1 +(1:numrunners)%%length(colors)
-#   ltys = rep(1:numlty, each=length(colors), length=numrunners)
-#   
-#   mapply(function(df,i) {
-#     lines(df$times ~df$age,
-#           col=colors[colindx[i]], lwd=2, lty=ltys[i])
-#   },listrunners, i=1:numrunners)
-# }
 
-
-
-## 
 # QUESTIONS
 # ? Who have lower age-related decline (percent per decade) in performance?
 # elite repeat_runners or mortal (based on running time to decide who are elite repeat_runners
@@ -673,27 +728,27 @@ Implications for exercise training. Sports Med. 2003, 33, 877–888.), it is pos
 ## Using cross-sectional data
 # model.peak <- lm(time~age+age2+age:gender,
 #                  data=df %>% mutate(age2=age^2)); summary(model.peak)
-# 
+#
 # model.peak_m <- lm(time~age+age2,
-#                  data=df %>% 
-#                    mutate(age2=age^2) %>% 
+#                  data=df %>%
+#                    mutate(age2=age^2) %>%
 #                    filter(gender=="M")); summary(model.peak_m)
 # model.peak_w <- lm(time~age+age2,
-#                  data=df %>% 
-#                    mutate(age2=age^2) %>% 
+#                  data=df %>%
+#                    mutate(age2=age^2) %>%
 #                    filter(gender=="W")); summary(model.peak_w)
 # # peak age = x* = -b/2a
 # pa_m <- -summary(model.peak_m)$coefficients[2,1]/(2*summary(model.peak_m)$coefficients[3,1]); pa_m
 # pa_w <- -summary(model.peak_w)$coefficients[2,1]/(2*summary(model.peak_w)$coefficients[3,1]); pa_w
-# 
+#
 # # performance at peak age
 # pperf_m <- predict(model.peak_m, data.frame(age=pa_m, age2=pa_m^2), level=0.95, interval= "confidence"); pperf_m
 # pperf_w <- predict(model.peak_w, data.frame(age=pa_w, age2=pa_w^2), level=0.95, interval= "confidence"); pperf_w
 
 ## Using panel data
 model.panel_pa <- plm(time~age+age2+gender,
-                      data= rerun %>% 
-                        mutate(age2=age^2) %>% 
+                      data= rerun %>%
+                        mutate(age2=age^2) %>%
                         filter(age>=10),
                       index= c("id","year"),
                       method="within",
@@ -755,13 +810,13 @@ ggplot(data = rerun %>% filter(age>=10, gender=="M")
   ggtitle("Running time of men throughout races") +
   # facet_grid(rows = vars(gender)) +
   theme(legend.position="none") +
-  geom_smooth(group= F, method = "lm", 
+  geom_smooth(group= F, method = "lm",
               formula = y ~ poly(x,2),
               level = 1,
               se = T,
               fill = NA) +
   geom_point(aes(x=pa_m[1], y=pperf_m[1]), color="black", size=3) +
-  annotate("text", x=pa_m[1]+5, y=pperf_m[1]+5, 
+  annotate("text", x=pa_m[1]+5, y=pperf_m[1]+5,
            label=paste0("(",
                         round(pa_m[1], digits = 1),
                         ", ",
@@ -773,7 +828,7 @@ ggplot(data = rerun %>% filter(age>=10, gender=="W")
        %>% mutate(gender=case_when(
          gender=="M" ~ "Men",
          gender=="W" ~ "Women"
-       )), 
+       )),
        aes(x = age, y = time, group = id)) +
   geom_line(aes(color=id)) + # line graph
   xlab("Age") +
@@ -781,13 +836,13 @@ ggplot(data = rerun %>% filter(age>=10, gender=="W")
   ggtitle("Running time of women throughout races") +
   # facet_grid(rows = vars(gender)) +
   theme(legend.position="none") +
-  geom_smooth(group= F, method = "lm", 
+  geom_smooth(group= F, method = "lm",
               formula = y ~ poly(x,2),
               level = 1,
               se = T,
               fill = NA) +
   geom_point(aes(x=pa_w[1], y=pperf_w[1]), color="black", size=3) +
-  annotate("text", x=pa_w[1]+5, y=pperf_w[1]+5, 
+  annotate("text", x=pa_w[1]+5, y=pperf_w[1]+5,
            label=paste0("(",
                         round(pa_w[1], digits = 1),
                         ", ",
@@ -800,7 +855,9 @@ ggplot(data = rerun %>% filter(age>=10, gender=="W")
 
 From the record of tracked runners, filtered people at least 10 years old, using quadratic regression model, the peak age of performance for men is `r round(pa_m, digits=1)` (95% confidence to be between `r round(pperf_m[2:3], digits=1)` minutes) and women is `r round(pa_w[1], digits=1)` (95% confidence to be between `r round(pperf_w[2:3], digits=1)` minutes).
 
-```{r}
+```{r loess}
+random_subset <- df %>% sample_n(200) # oof idk man
+
 # # DISABLED: this takes a reallyyyyy long time: temporarily disabling
 # resid.lo <- loess(resids ~ age,
 #   data = data.frame(resids = rstandard(model),

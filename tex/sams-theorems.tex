@@ -1,0 +1,72 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREM ENVIRONMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FORMATTING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % bold theorem headers
+% \makeatletter
+% \newtheoremstyle{bthm}
+% 	{3pt}% space before
+% 	{3pt}% space after
+% 	{\parshape 1 0mm \linewidth}% body font
+% 	{0cm}% indent
+%  	{\bfseries}% header font
+% 	{.}% punctuation
+% 	{0.5em}% after theorem header
+% 	{}% header specification (empty for default)
+% \makeatother
+% \theoremstyle{bthm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NUMBERING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% determine if the document uses a particular counter
+\makeatletter
+\newcommand*\ifcounter[1]{%
+  \ifcsname c@#1\endcsname
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi
+}
+\makeatother
+
+% define different numbering scheme for chapters vs. sections
+\ifcounter{chapter}{
+	% if chapter counter is used, use numbering scheme
+	% <chapter> . <section> . x
+	\newtheorem{thm}{Theorem}[chapter]
+	\numberwithin{thm}{section}
+}{
+	% if no chapter counter found, use numbering scheme
+	% <section> . x
+	\newtheorem{thm}{Theorem}[section]
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DECLARATIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% typical theorem environments
+\newtheorem{alg}[thm]{Algorithm}
+\newtheorem{cnj}[thm]{Conjecture}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{dfn}[thm]{Definition}
+\newtheorem{exm}[thm]{Example}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prp}[thm]{Proposition}
+\newtheorem{rmk}[thm]{Remark}
+
+% less common
+\newtheorem{fact}[thm]{Fact}
+\newtheorem{goal}[thm]{Goal}
+\newtheorem{idea}[thm]{Idea}
+\newtheorem{obs}[thm]{Observation}
+\newtheorem{q}[thm]{Question}
