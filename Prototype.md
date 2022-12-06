@@ -629,6 +629,11 @@ ggplot(data = rerun %>%
   stat_summary(group= F, geom="line", fun = "mean", color="black", size=1, linetype="solid")
 ```
 
+```
+## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+```
+
 ![plot of chunk overview_tracked_runners](figure/overview_tracked_runners-3.png)
 
 ```r
@@ -1017,9 +1022,9 @@ densityPlot(rerun_type$avg_time, xlab = "Average running time"); title("Distribu
 ```r
 library(scales)
 
-bounds1 <- c(0, 60)
-bounds2 <- c(80,90)
-bounds3 <- c(110,160)
+bounds1 <- c(0, quantile(rerun_type$avg_time, probs = 0.2))
+bounds2 <- c(quantile(rerun_type$avg_time, probs = 0.4), quantile(rerun_type$avg_time, probs = 0.6))
+bounds3 <- c(quantile(rerun_type$avg_time, probs = 0.8),160)
 
 ggplot(rerun_type, aes(x=avg_time))  +
   stat_density(geom = "line") +
@@ -1045,24 +1050,24 @@ ggplot(rerun_type, aes(x=avg_time))  +
     "text", bounds1[2]-5, y = 0.003,
     label = percent(mean(!is.na(oob_censor(rerun_type$avg_time, bounds1)))))+
   annotate(
-    "text", bounds2[2]-5, y = 0.003,
+    "text", bounds2[2]-3, y = 0.003, 
     label = percent(mean(!is.na(oob_censor(rerun_type$avg_time, bounds2)))))+
   annotate(
-    "text", bounds3[2]-25, y = 0.003,
+    "text", bounds3[2]-50, y = 0.003, 
     label = percent(mean(!is.na(oob_censor(rerun_type$avg_time, bounds3))))
   )
 ```
 
 ```
-## Warning: Removed 448 rows containing missing values (`position_stack()`).
+## Warning: Removed 377 rows containing missing values (`position_stack()`).
 ```
 
 ```
-## Warning: Removed 464 rows containing missing values (`position_stack()`).
+## Warning: Removed 476 rows containing missing values (`position_stack()`).
 ```
 
 ```
-## Warning: Removed 301 rows containing missing values (`position_stack()`).
+## Warning: Removed 255 rows containing missing values (`position_stack()`).
 ```
 
 ![plot of chunk elite_vs_nonelite_gr0](figure/elite_vs_nonelite_gr0-2.png)
@@ -1337,7 +1342,195 @@ ggplot(data = rerun %>% filter(!is.na(run_type), age>=10)
 # https://researchoutreach.org/articles/ageing-change-sport-performance-master-athletes-answer/
 ```
 
-Another categorization of runner type
+Another categorization of runner type is by percentile within sex
+
+
+```r
+quintile <- rerun_type %>% 
+  group_by(gender) %>% 
+  summarise(qt1=quantile(avg_time, probs = c(0.2)),
+            qt2=quantile(avg_time, probs = c(0.4)),
+            qt3=quantile(avg_time, probs = c(0.6)),
+            qt4=quantile(avg_time, probs = c(0.8)))
+
+quintile[1,2] 
+```
+
+```
+## # A tibble: 1 × 1
+##     qt1
+##   <dbl>
+## 1  72.0
+```
+
+```r
+rerun_type <- rerun_type %>% 
+  mutate(run_type2=case_when(
+    gender=="M" & avg_time<=quintile[1,"qt1"] ~ 1,
+    gender=="M" & avg_time>=quintile[1,"qt2"] & avg_time<=quintile[1,"qt3"] ~ 2,
+    gender=="M" & avg_time>=quintile[1,"qt4"] ~ 3,
+    gender=="W" & avg_time<=quintile[2,"qt1"] ~ 1,
+    gender=="W" & avg_time>=quintile[2,"qt2"] & avg_time<=quintile[2,"qt3"] ~ 2,
+    gender=="W" & avg_time>=quintile[2,"qt4"] ~ 3)
+  )
+
+
+## Check how many people in each type of runners
+
+rerun_type %>% 
+  group_by(run_type2, gender) %>% 
+  summarise(num_runners=n())
+```
+
+```
+## `summarise()` has grouped output by 'run_type2'. You can override using the
+## `.groups` argument.
+```
+
+```
+## # A tibble: 8 × 3
+## # Groups:   run_type2 [4]
+##   run_type2 gender num_runners
+##       <dbl> <fct>        <int>
+## 1         1 M              981
+## 2         1 W              575
+## 3         2 M              981
+## 4         2 W              575
+## 5         3 M              981
+## 6         3 W              575
+## 7        NA M             1958
+## 8        NA W             1150
+```
+
+```r
+## Merge back the type to the performance across years dataset
+rerun <- rerun %>% left_join(y=rerun_type %>% 
+                               select(-avg_time,-avg_performance),
+                             by = c("id", "name", "races",
+                                    "year_of_birth", "gender"))
+
+## Regress Time running on age for each group
+# list.panel_bytype <- lapply(1:3,
+#                             function(i) {
+#                               plm(time~age+gender,
+#                                   data = rerun %>%
+#                                     filter(run_type==i),
+#                                   index=c("id", "year"),
+#                                   model = "within",
+#                                   effect = "time")
+#   }) 
+# sapply(list.panel_bytype, 
+#        function(x) print(coeftest(x, vcov. = vcovHC, type = "HC1" )))                            
+
+model.panel_t1 <- plm(time~age+gender+gender:age,
+                   data = rerun %>% filter(run_type2==1, age>=10),
+                   index=c("id", "year"),
+                   model = "within",
+                   effect = "time")
+# t1_check <- lm(time ~ age + gender + year,
+#               data = rerun %>% filter(run_type==1, age>=10))
+# summary(t1_check)
+model.panel_t2 <- plm(time~age+gender+gender:age,
+                   data = rerun %>% filter(run_type2==2, age>=10),
+                   index=c("id", "year"),
+                   model = "within",
+                   effect = "time")
+model.panel_t3 <- plm(time~age+gender+gender:age,
+                   data = rerun %>% filter(run_type2==3, age>=10),
+                   index=c("id", "year"),
+                   model = "within",
+                   effect = "time")
+
+coeftest(model.panel_t1, vcov. = vcovHC, type = "HC1")
+```
+
+```
+## 
+## t test of coefficients:
+## 
+##              Estimate Std. Error t value  Pr(>|t|)    
+## age          0.204030   0.017237 11.8364 < 2.2e-16 ***
+## genderW     14.757362   1.225128 12.0456 < 2.2e-16 ***
+## age:genderW -0.094387   0.029172 -3.2355  0.001218 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+```r
+coeftest(model.panel_t2, vcov. = vcovHC, type = "HC1")
+```
+
+```
+## 
+## t test of coefficients:
+## 
+##              Estimate Std. Error t value  Pr(>|t|)    
+## age          0.132642   0.010971 12.0903 < 2.2e-16 ***
+## genderW     15.450615   0.681703 22.6647 < 2.2e-16 ***
+## age:genderW -0.064684   0.015972 -4.0499 5.159e-05 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+```r
+coeftest(model.panel_t3, vcov. = vcovHC, type = "HC1")
+```
+
+```
+## 
+## t test of coefficients:
+## 
+##              Estimate Std. Error t value  Pr(>|t|)    
+## age          0.313803   0.026307 11.9283 < 2.2e-16 ***
+## genderW     17.396202   1.659973 10.4798 < 2.2e-16 ***
+## age:genderW -0.129993   0.036828 -3.5298 0.0004177 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+The result from regression model suggest that:
+
+(1) For male runners, getting older 1 year will likely to slow them down by 0.2 minutes if they are type 1,which would translate to almost 2 minutes after a decade.  0.1 if they are type 2 runners, or 1.3 minutes after a decade. 0.3 if they are type 3 runners, or 3.1 minutes after a decade.
+
+(2) For female runners, getting older 1 year will likely to slow them down by 0.1 minutes if they are type 1,which would translate to almost 1.1 minutes after a decade.  0.1 if they are type 2 runners, or 0.7 minutes after a decade. 0.2 if they are type 3 runners, or 1.8 minutes after a decade.
+
+(3) The effect of age on running time significantly different between genders at 95% confidence level.
+
+
+
+```r
+## all-in-one graph
+ggplot(data = rerun %>% filter(!is.na(run_type2), age>=10)
+       %>% mutate(run_type=case_when(
+         run_type2==1 ~ "Type 1",
+         run_type2==2 ~ "Type 2",
+         run_type2==3 ~ "Type 3"))
+       %>% mutate(gender=case_when(
+         gender=="M" ~ "Men",
+         gender=="W" ~ "Women"
+       )),
+       aes(x = age, y = time, group = id)) +
+  geom_line(aes(color=id)) + # line graph
+  xlab("Age") +
+  ylab("Race time") +
+  ggtitle("Running time of different runner type throughout races") +
+  facet_grid(rows = vars(gender),
+             cols = vars(run_type)) +
+  theme(legend.position="none") +
+  # geom_abline(slope=model.panel_t1$coefficients[1],
+  #             intercept= summary(t1_check)$coefficients[1,1],
+  #             color='red') +
+  geom_smooth(group= F, method = "loess", fill = NA)
+```
+
+```
+## `geom_smooth()` using formula = 'y ~ x'
+```
+
+![plot of chunk run_type2_gr](figure/run_type2_gr-1.png)
+
+
+
 ## Peak age and peak performance
 
 Under observation that maximal oxygen uptake—a main correlate of running speed—varied in an inverse U trend across life-time (Rate and mechanism of maximal oxygen consumption decline with aging:
