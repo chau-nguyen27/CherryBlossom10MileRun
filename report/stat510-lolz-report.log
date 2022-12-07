@@ -1,6 +1,6 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.11.23)  5 DEC 2022 16:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.9.28)  7 DEC 2022 15:20
 entering extended mode
- \write18 enabled.
+ restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
 **/home/sam/Dropbox/stat-510-consulting/CherryBlossom10MileRun/report/stat510-lolz-report.tex
@@ -184,29 +184,51 @@ Package: mhsetup 2021/03/18 v1.4 programming setup (MH)
 \l_MT_below_shortintertext_sep=\dimen170
 \xmathstrut@box=\box54
 \xmathstrut@dim=\dimen171
+) (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+) (/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+ (/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen172
+\captionmargin@=\dimen173
+\captionwidth=\dimen174
+\caption@tempdima=\dimen175
+\caption@indent=\dimen176
+\caption@parindent=\dimen177
+\caption@hangindent=\dimen178
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count280
+\c@continuedfloat=\count281
+) (/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
+\c@subfigure=\count282
+\c@subtable=\count283
 ) (../tex/sams-theorems.tex
-\c@thm=\count280
+\c@thm=\count284
 ) (../tex/sam-macros.tex) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count281
+\l__color_backend_stack_int=\count285
 \l__pdf_internal_box=\box55
 ) (./stat510-lolz-report.aux)
 \openout1 = `stat510-lolz-report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 97.
-LaTeX Font Info:    ... okay on input line 97.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 97.
-LaTeX Font Info:    ... okay on input line 97.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 97.
-LaTeX Font Info:    ... okay on input line 97.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 97.
-LaTeX Font Info:    ... okay on input line 97.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 97.
-LaTeX Font Info:    ... okay on input line 97.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 97.
-LaTeX Font Info:    ... okay on input line 97.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 97.
-LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 107.
+LaTeX Font Info:    ... okay on input line 107.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 107.
+LaTeX Font Info:    ... okay on input line 107.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 107.
+LaTeX Font Info:    ... okay on input line 107.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 107.
+LaTeX Font Info:    ... okay on input line 107.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 107.
+LaTeX Font Info:    ... okay on input line 107.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 107.
+LaTeX Font Info:    ... okay on input line 107.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 107.
+LaTeX Font Info:    ... okay on input line 107.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -256,16 +278,16 @@ Package graphics Info: Driver file: pdftex.def on input line 107.
 File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count282
-\scratchdimen=\dimen172
+\scratchcounter=\count286
+\scratchdimen=\dimen179
 \scratchbox=\box56
-\nofMPsegments=\count283
-\nofMParguments=\count284
+\nofMPsegments=\count287
+\nofMParguments=\count288
 \everyMPshowfont=\toks33
-\MPscratchCnt=\count285
-\MPscratchDim=\dimen173
-\MPnumerator=\count286
-\makeMPintoPDFobject=\count287
+\MPscratchCnt=\count289
+\MPscratchDim=\dimen180
+\MPnumerator=\count290
+\makeMPintoPDFobject=\count291
 \everyMPtoPDFconversion=\toks34
 ))) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -273,38 +295,90 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-\Gin@req@height=\dimen174
-\Gin@req@width=\dimen175
+\Gin@req@height=\dimen181
+\Gin@req@width=\dimen182
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 98.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 108.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 98.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 108.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-<../figure/boxplot_runtime_age-1.png, id=1, 505.89pt x 505.89pt>
+) [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
+<../figure/descriptive_stat-1.png, id=12, 505.89pt x 505.89pt>
+File: ../figure/descriptive_stat-1.png Graphic file (type png)
+<use ../figure/descriptive_stat-1.png>
+Package pdftex.def Info: ../figure/descriptive_stat-1.png  used on input line 246.
+(pdftex.def)             Requested size: 217.35588pt x 217.35863pt.
+<../figure/descriptive_stat-2.png, id=13, 505.89pt x 505.89pt>
+File: ../figure/descriptive_stat-2.png Graphic file (type png)
+<use ../figure/descriptive_stat-2.png>
+Package pdftex.def Info: ../figure/descriptive_stat-2.png  used on input line 253.
+(pdftex.def)             Requested size: 217.35588pt x 217.35863pt.
+<../figure/boxplot_runtime_age-1.png, id=14, 505.89pt x 505.89pt>
 File: ../figure/boxplot_runtime_age-1.png Graphic file (type png)
 <use ../figure/boxplot_runtime_age-1.png>
-Package pdftex.def Info: ../figure/boxplot_runtime_age-1.png  used on input line 115.
-(pdftex.def)             Requested size: 221.78923pt x 221.78947pt.
- [1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2 <../figure/boxplot_runtime_age-1.png>] (./stat510-lolz-report.aux) ) 
+Package pdftex.def Info: ../figure/boxplot_runtime_age-1.png  used on input line 264.
+(pdftex.def)             Requested size: 354.86412pt x 354.86934pt.
+ [3]
+<../figure/overview_tracked_runners-4.png, id=18, 505.89pt x 505.89pt>
+File: ../figure/overview_tracked_runners-4.png Graphic file (type png)
+<use ../figure/overview_tracked_runners-4.png>
+Package pdftex.def Info: ../figure/overview_tracked_runners-4.png  used on input line 293.
+(pdftex.def)             Requested size: 354.86412pt x 354.86934pt.
+ [4 <../figure/descriptive_stat-1.png (PNG copy)> <../figure/descriptive_stat-2.png (PNG copy)>]
+<../figure/elite_vs_nonelite_gr0-2.png, id=25, 505.89pt x 505.89pt>
+File: ../figure/elite_vs_nonelite_gr0-2.png Graphic file (type png)
+<use ../figure/elite_vs_nonelite_gr0-2.png>
+Package pdftex.def Info: ../figure/elite_vs_nonelite_gr0-2.png  used on input line 336.
+(pdftex.def)             Requested size: 217.35588pt x 217.35863pt.
+<../figure/overview_tracked_runners-2.png, id=26, 505.89pt x 505.89pt>
+File: ../figure/overview_tracked_runners-2.png Graphic file (type png)
+<use ../figure/overview_tracked_runners-2.png>
+Package pdftex.def Info: ../figure/overview_tracked_runners-2.png  used on input line 342.
+(pdftex.def)             Requested size: 217.35588pt x 217.35863pt.
+ [5 <../figure/boxplot_runtime_age-1.png>]
+<../figure/run_type2_gr-1.png, id=31, 505.89pt x 505.89pt>
+File: ../figure/run_type2_gr-1.png Graphic file (type png)
+<use ../figure/run_type2_gr-1.png>
+Package pdftex.def Info: ../figure/run_type2_gr-1.png  used on input line 385.
+(pdftex.def)             Requested size: 354.86412pt x 354.86934pt.
+ [6 <../figure/overview_tracked_runners-4.png (PNG copy)>]
+<../figure/peak_plot2-1.png, id=35, 505.89pt x 505.89pt>
+File: ../figure/peak_plot2-1.png Graphic file (type png)
+<use ../figure/peak_plot2-1.png>
+Package pdftex.def Info: ../figure/peak_plot2-1.png  used on input line 419.
+(pdftex.def)             Requested size: 217.35588pt x 217.35863pt.
+<../figure/peak_plot2-2.png, id=36, 505.89pt x 505.89pt>
+File: ../figure/peak_plot2-2.png Graphic file (type png)
+<use ../figure/peak_plot2-2.png>
+Package pdftex.def Info: ../figure/peak_plot2-2.png  used on input line 426.
+(pdftex.def)             Requested size: 217.35588pt x 217.35863pt.
+ [7 <../figure/elite_vs_nonelite_gr0-2.png> <../figure/overview_tracked_runners-2.png (PNG copy)>] [8 <../figure/run_type2_gr-1.png (PNG copy)>] [9 <../figure/peak_plot2-1.png (PNG copy)> <../figure/peak_plot2-2.png (PNG copy)>]
+<../figure/unnamed-chunk-2-1.png, id=48, 505.89pt x 505.89pt>
+File: ../figure/unnamed-chunk-2-1.png Graphic file (type png)
+<use ../figure/unnamed-chunk-2-1.png>
+Package pdftex.def Info: ../figure/unnamed-chunk-2-1.png  used on input line 516.
+(pdftex.def)             Requested size: 354.86412pt x 354.86934pt.
+ [10 <../figure/unnamed-chunk-2-1.png>] (./stat510-lolz-report.aux) ) 
 Here is how much of TeX's memory you used:
- 4828 strings out of 478287
- 75641 string characters out of 5849288
- 378303 words of memory out of 5000000
- 22974 multiletter control sequences out of 15000+600000
- 473360 words of font info for 44 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 63i,11n,71p,304b,260s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb>
-Output written on stat510-lolz-report.pdf (2 pages, 53654 bytes).
+ 6380 strings out of 480247
+ 106385 string characters out of 5896151
+ 404949 words of memory out of 5000000
+ 24245 multiletter control sequences out of 15000+600000
+ 478184 words of font info for 63 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 63i,11n,71p,1041b,496s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on stat510-lolz-report.pdf (10 pages, 901394 bytes).
 PDF statistics:
- 28 PDF objects out of 1000 (max. 8388607)
- 15 compressed objects within 1 object stream
+ 85 PDF objects out of 1000 (max. 8388607)
+ 45 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 51 words of extra memory for PDF output out of 10000 (max. 10000000)
 
