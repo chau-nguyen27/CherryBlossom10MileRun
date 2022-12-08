@@ -216,7 +216,7 @@ pure effect of aging.
 % 	\label{age-dist}
 % \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!hb]
 	\centering
 	\includegraphics[width = 0.75\textwidth]
 	{../figure/boxplot_runtime_age-1.png}
@@ -249,6 +249,27 @@ peers (there are more lower-bound outliers in women's plot).
 \subsubsection*{The general effect of aging on
 	men's and women's racing performance}
 
+% \begin{figure}[ht]
+% 	\centering
+% 	\begin{subfigure}{0.49\textwidth}
+% 		\includegraphics[width = \textwidth]
+% 		{../figure/overview_tracked_runners-3.png}
+% 		\caption{}
+% 	\end{subfigure}
+% 	\hfill
+% 	\begin{subfigure}{0.49\textwidth}
+% 		\includegraphics[width = \textwidth]
+% 		{../figure/overview_tracked_runners-4.png}
+% 		\caption{}
+% 	\end{subfigure}
+% 	\caption{
+% 		Top 50 participants who participated in the most races.
+% 		As participants age, their time to complete the race
+% 		tends to increase.
+% 	}
+% 	\label{tracked-runners-smooth}
+% \end{figure}
+
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width = 0.75\textwidth]
@@ -261,9 +282,11 @@ peers (there are more lower-bound outliers in women's plot).
 	\label{tracked-runners-smooth}
 \end{figure}
 
-Using the tracked runners dataset, after averaging and smoothing multiple
-runners' performance, two possible models for this data are linear and
-quadratic regression.
+% Using the tracked runners dataset, after averaging and smoothing multiple
+% runners' performance, two possible models for this data are linear and
+% quadratic regression.
+
+Using the tracked runners dataset, after loess smoothing multiple runners' performance, two possible models for this data are linear and quadratic regression.
 
 After fitting two models, our statistical criterion suggests that linear
 regression should be preferred.
@@ -295,29 +318,41 @@ We can be 99\% confident that:
 
 \subsubsection*{Declining performance rate for different types of runners}
 
-\begin{figure}
+\begin{figure}[ht]
 	\centering
-	\begin{subfigure}[]{0.49\textwidth}
-		\includegraphics[width = \textwidth]
-		{../figure/elite_vs_nonelite_gr0-2.png}
-		\caption{}
-		\label{type123-dist}
-	\end{subfigure}
-	\begin{subfigure}[]{0.49\textwidth}
-		\includegraphics[width = \textwidth]
-		{../figure/overview_tracked_runners-2.png}
-		\caption{}
-		\label{top-10-tracked}
-	\end{subfigure}
+	\includegraphics[width = 0.6\textwidth]
+	{../figure/elite_vs_nonelite_gr0-2.png}
 	\caption{
-		(a) The top 20\%, middle 20\%, and bottom 20\% of
-			tracked runners were considered type 1, type 2, and
-			type 3, respectively.
-		(b) The time to complete the race increases for the
-			tracked runners as they aged.
+		The top 20\%, middle 20\%, and bottom 20\% of
+		tracked runners were considered type 1, type 2, and
+		type 3, respectively.
 	}
-	\label{type123}
+	\label{type123-dist}
 \end{figure}
+
+% \begin{figure}
+% 	\centering
+% 	\begin{subfigure}[]{0.49\textwidth}
+% 		\includegraphics[width = \textwidth]
+% 		{../figure/elite_vs_nonelite_gr0-2.png}
+% 		\caption{}
+% 		\label{type123-dist}
+% 	\end{subfigure}
+% 	\begin{subfigure}[]{0.49\textwidth}
+% 		\includegraphics[width = \textwidth]
+% 		{../figure/overview_tracked_runners-2.png}
+% 		\caption{}
+% 		\label{top-10-tracked}
+% 	\end{subfigure}
+% 	\caption{
+% 		(a) The top 20\%, middle 20\%, and bottom 20\% of
+% 			tracked runners were considered type 1, type 2, and
+% 			type 3, respectively.
+% 		(b) The time to complete the race increases for the
+% 			tracked runners as they aged.
+% 	}
+% 	\label{type123}
+% \end{figure}
 
 % \begin{figure}
 % 	\centering
@@ -349,6 +384,7 @@ The median runners were between 79-86 minutes for men and 92-99 minutes
 for women.
 And lastly, the slowest runners took at least 94 minutes for men and
 107 minutes for women to complete.
+
 
 \begin{figure}[ht]
 	\centering
@@ -389,7 +425,7 @@ participants who %mainly keep their performance from year to year.
 manage to sustain their performance throughout the years
 \subsubsection*{Age of peak performance}
 
-\begin{figure}
+\begin{figure}[ht]
 	\centering
 	\begin{subfigure}{0.49\textwidth}
 		\includegraphics[width = \textwidth]
@@ -485,7 +521,7 @@ This study and further investigation will benefit from more data collection effo
 
 \appendix
 
-\section{Appendix}
+\section*{Appendix}
 
 For the confidence levels used and inference to hold,
 the noise should follow Normal distribution.
@@ -494,7 +530,7 @@ provided in Figure \ref{qq}.
 
 \begin{figure}[hb]
 	\centering
-	\includegraphics[width = 0.7\textwidth]
+	\includegraphics[width = 0.8\textwidth]
 	{../figure/Image.png}
 	\caption{
 		Q-Q plot for estimated residuals.
