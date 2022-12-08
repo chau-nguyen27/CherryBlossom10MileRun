@@ -113,82 +113,24 @@
 
 \section*{Executive Summary}
 
-From our analysis, we found that age does have a significant factor in your
-physical ability. Evidence suggests that there is a peak age at which physical
-ability is best, occurring around the age of 26 for both men and women.
-Furthermore, there are significant differences between how age affects ability
-between men and women. Overall, from our findings, we can conclude that as
-people age, their physical ability worsens.
+From our analysis, we found that age does have a significant factor in your physical ability. Evidence suggests that there is a peak age at which physical ability is best, occurring around the age of 26 for both men and women. Furthermore, aging affects differently between genders, and among runners at different levels. Overall, from our findings, we can conclude that as people age, their physical ability worsens.
+
 
 
 \section*{Introduction}
 
-The overall goal of this project is to determine how age relates to physical
-ability, specifically their performance in a marathon, to their age. To do this,
-we also need to see what the statistically “average” runner was like.
-This included finding out how old the average runner was, what the average time
-to complete the race would be, as well as how many participants came back to run
-again in multiple races.
-Along with this, we wanted to see how people who have participated multiple
-times compared to everyone else; did they improve as they aged, or did they
-stay the same/got slower? To do all of this, we analyzed the data collected
-from the Cherry Blossom 10 Mile Run to draw correlations between a runner's
-age and how fast they ran the race.
-Finally, using all of the data we collected, we sought to determine the age at
-which runners were the most physically fit.
-In our case, this would be the age where runners were the fastest.
-One hypothesis that we wanted to confirm was that there is a trend of physical
-ability getting worse past a certain age.
-Another hypothesis we tested was the idea that runners who were faster will
-not decline in ability as they age as much as slower runners.
+The overall goal of this project is to determine how age relates to physical ability, specifically performance in a marathon. To answer this question, we also need to see what the statistically “average” runner was like. This included finding out how old the average runner was, what the average time to complete the race would be, as well as how many participants came back to run again in multiple races. Moreover, we wanted to look at the performance of people who have participated multiple times; did they improve as they aged, or did they stay the same/get slower? Aiming to answer this question, we analyzed the data collected from the Cherry Blossom 10 Mile Run to draw correlations between a runner’s age and how fast they ran the race. Finally, using all of the data we collected, we sought to determine the age at which runners were the most physically fit. In our case, this would be the age where runners were the fastest. One hypothesis that we wanted to confirm was that there is a trend of physical ability getting worse past a certain age. We also look into the declining rate of performance among different groups of runners to see if slower runners slow down at a lower or higher rate compared to faster ones.
+
 
 \section*{Background}
 
-We will be working with information from runners of the Cherry Blossom 10
-Mile Run, which is an annual marathon held in Washington D.C. each Spring,
-typically at the start of April.
-The race is often used as training for those who are participating in other
-footraces, so we can expect many of the runners to be more active than the
-average person.
-The race began in 1973, and race participation grew steadily until 2020,
-when race participation drastically fell  due to the Covid-19 pandemic.
-For this reason, we opted to examine only the 47 years worth of data from
-1973 through 2019.
-We obtained the data on race participants from the Cherry Blossom Ten Mile Run
-website via web scraping.
+This study utilizes information from runners of the Cherry Blossom 10 Mile Run, which is an annual marathon held in Washington D.C. each Spring, typically at the start of April. The race is often used as training for those who are participating in other footraces, so we can expect many of the runners to be more active than the average person. The race began in 1973, and race participation grew steadily until 2020, when race participation drastically fell due to the Covid-19 pandemic. For this reason, we opted to examine only data of 47 years from 1973 through 2019. We obtained the data on race participants from the Cherry Blossom Ten Mile Run website via web scraping.
+
 
 \section*{Data}
 
-The data we used was collected through the Cherry Blossom 10 Mile Run database.
-The most important pieces of information that we kept track of include:
-the year of the race, the name of the racer, their gender, their time and
-pace of the race, where they came from (hometown), and what position they
-finished in.
-For our analysis, we decided to convert the time to minutes, and also
-convert the pace to minutes per mile.
-Once we had collected the data from the database, we were left with around
-340 thousand entries to work with.
-However, one thing that we had to deal with when working with this data was
-that for the first 5 or so years, many of the recorded runs had information
-that we had to exclude due to unclarity.
-These ranged from hometowns to division and age.
-Age was particularly important because it is the main explaining factor of
-physical performance that this study focuses on.
-Because of this, we may see some inconsistencies, particularly in the earlier
-years, as there isn't as much data as later on when more people
-started participating.
-After cleaning the data of missing key values, we were left with around
-320 thousand entries.
-Using the data we extracted and cleaned, we were able to create a list of
-unique runners using a combination of the runner's name, birth year
-(the year of the race subtracted by the age of the participant),
-gender, and hometown.
-By doing so, we are able to identify some of the runners as participating
-in multiple races, and thereby follow their performance as they age.
-Although there is a limit of 140 minutes for runners to complete the race,
-some records broke this limit. We decide to keep those observations since they
-might reflect the actual racing time of people rather than censoring and
-systematically biasing the data.
+The data we used was collected through the Cherry Blossom 10 Mile Run database. The most important pieces of information that we kept track of include: the year of the race, the name of the racer, their gender, their time and pace of the race, where they came from (hometown), and what position they finished in. For our analysis, we decided to convert the time to minutes, and also convert the pace to minutes per mile. Once we had collected the data from the database, we were left with around 340 thousand entries to work with. However, one problem is that for the first 5 years, many of the recorded runs had information that we had to exclude due to unclarity. These ranged from hometowns to division and age. Age was particularly important because it is the main explaining factor of physical performance that this study focuses on. Because of this, we may see some inconsistencies, particularly in the earlier years, as there isn’t as much data as later on when more people started participating. After cleaning the data of missing key values, we were left with around 320 thousand entries. Using the data we extracted and cleaned, we were able to create a list of unique runners using a combination of the runner’s name, birth year (the year of the race subtracted by the age of the participant), gender, and hometown. By doing so, we are able to identify some of the runners as participating in multiple races, and thereby follow their performance as they age. Although there is a limit of 140 minutes for runners to complete the race, some records broke this limit. We decide to keep those observations since they might reflect the actual racing time of people rather than censoring and systematically biasing the data.
+
 
 \section*{Methods}
 
@@ -254,7 +196,11 @@ pure effect of aging.
 		\caption{}
 		\label{age-dist-2}
 	\end{subfigure}
-	\caption{I need a caption}
+	\caption{
+		(a) The age distribution of participants for each year.
+		Colors represent age group.
+		(b) The age proportion of participants for each year.
+	}
 	\label{age-dist}
 \end{figure}
 
@@ -262,7 +208,11 @@ pure effect of aging.
 	\centering
 	\includegraphics[width = 0.8\textwidth]
 	{../figure/boxplot_runtime_age-1.png}
-	\caption{I need a caption}
+	\caption{
+		Time for participants to complete the race for each age group.
+		Dots denote outliers. Half of participants in a given age group
+		lie inside the boxed interval.
+	}
 	\label{box-plot}
 \end{figure}
 
@@ -291,7 +241,11 @@ peers (there are more lower-bound outliers in women's plot).
 	\centering
 	\includegraphics[width = 0.8\textwidth]
 	{../figure/overview_tracked_runners-4.png}
-	\caption{I need a caption}
+	\caption{
+		Top 50 participants who participated in the most races.
+		As participants age, their time to complete the race
+		tends to increase.
+	}
 	\label{tracked-runners-smooth}
 \end{figure}
 
@@ -334,16 +288,22 @@ We can be 99\% confident that:
 	\begin{subfigure}[]{0.49\textwidth}
 		\includegraphics[width = \textwidth]
 		{../figure/elite_vs_nonelite_gr0-2.png}
-		\caption{i need a caption}
+		\caption{}
 		\label{type123-dist}
 	\end{subfigure}
 	\begin{subfigure}[]{0.49\textwidth}
 		\includegraphics[width = \textwidth]
 		{../figure/overview_tracked_runners-2.png}
-		\caption{i need a caption}
+		\caption{}
 		\label{top-10-tracked}
 	\end{subfigure}
-	\caption{i need a caption}
+	\caption{
+		(a) The top 20\%, middle 20\%, and bottom 20\% of
+			tracked runners were considered type 1, type 2, and
+			type 3, respectively.
+		(b) The time to complete the race increases for the
+			tracked runners as they aged.
+	}
 	\label{type123}
 \end{figure}
 
@@ -366,8 +326,7 @@ We can be 99\% confident that:
 To test the declining rate of different types of runners,
 we separated runners into five quintiles and selected three different
 groups depending on their average run times between all of the years they
-raced
-(model [5]).
+raced; see Figure \ref{type123-dist}.
 Type 1 are the fastest 20\% of runners, type 2 are the middle 20\% and
 type 3 are the slowest 20\%.
 We discard the runners in-between these three groups to draw a clearer
@@ -383,12 +342,18 @@ And lastly, the slowest runners took at least 94 minutes for men and
 	\centering
 	\includegraphics[width = 0.8\textwidth]
 	{../figure/run_type2_gr-1.png}
-	\caption{I need a caption}
+	\caption{
+		The time to complete the race for tracked runners of
+		type 1,2,3 from left to right. Top row is men,
+		bottom row is women.
+		The trend curve suggests that runners are most physically
+		fit in their mid 20s.
+	}
 	\label{type123-trend}
 \end{figure}
 
-Next, we compared the trends between each type
-(model [6]).
+Next, we compared the trends between each type;
+see Figure \ref{type123-trend}.
 From this, we saw there was a relationship between runners' speed and how
 much they declined in performance each year.
 Type 3 runners on average declined in performance the most at a rate
@@ -408,8 +373,8 @@ so they may have a higher chance of burning out or sustaining injuries
 as they run, thus having a decent declining rate compared to the
 average person.
 As for type 2, they are most likely made of average marathon
-participants who mainly keep their performance from year to year.
-
+participants who %mainly keep their performance from year to year.
+manage to sustain their performance throughout the years
 \subsubsection*{Age of peak performance}
 
 \begin{figure}
@@ -455,9 +420,11 @@ From the average of the data we collected between men and women
 we have determined the peak age is 26.5 years for men and 26 years for women.
 On average, at these ages, the peak time of runners is between 77.1--77.9
 minutes for men and 92.2-93.2 minutes for women (95\% confidence level).
-With this, we can see that men will generally have a faster peak than women.
-However, the rate at which age decreases their physical performance is much
-higher than women.
+% With this, we can see that men will generally have a faster peak than women.
+% However, the rate at which age decreases their physical performance is much
+% higher than women.
+With this, we can see that men will generally have a faster peak than women. However, the rate at which age decreases their physical performance is much higher than women.
+See Figure \ref{peak}.
 
 
 \section*{Conclusions}
