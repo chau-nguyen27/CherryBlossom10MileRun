@@ -181,32 +181,44 @@ pure effect of aging.
 
 \subsubsection*{Overview from descriptive analysis}
 
-\begin{figure}
-	\centering
-	\begin{subfigure}{0.49\textwidth}
-		\includegraphics[width = \textwidth]
-		{../figure/descriptive_stat-1.png}
-		\caption{}
-		\label{age-dist-1}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}{0.49\textwidth}
-		\includegraphics[width = \textwidth]
-		{../figure/descriptive_stat-2.png}
-		\caption{}
-		\label{age-dist-2}
-	\end{subfigure}
-	\caption{
-		(a) The age distribution of participants for each year.
-		Colors represent age group.
-		(b) The age proportion of participants for each year.
-	}
-	\label{age-dist}
-\end{figure}
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width = 0.8\textwidth]
+	{../figure/descriptive_stat-1.png}
+	\caption{
+		The age distribution of participants for each year.
+		Colors represent age group.
+	}
+	\label{age-dist}
+\end{figure}
+
+% \begin{figure}
+% 	\centering
+% 	\begin{subfigure}{0.49\textwidth}
+% 		\includegraphics[width = \textwidth]
+% 		{../figure/descriptive_stat-1.png}
+% 		\caption{}
+% 		\label{age-dist-1}
+% 	\end{subfigure}
+% 	\hfill
+% 	\begin{subfigure}{0.49\textwidth}
+% 		\includegraphics[width = \textwidth]
+% 		{../figure/descriptive_stat-2.png}
+% 		\caption{}
+% 		\label{age-dist-2}
+% 	\end{subfigure}
+% 	\caption{
+% 		(a) The age distribution of participants for each year.
+% 		Colors represent age group.
+% 		(b) The age proportion of participants for each year.
+% 	}
+% 	\label{age-dist}
+% \end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width = 0.75\textwidth]
 	{../figure/boxplot_runtime_age-1.png}
 	\caption{
 		Time for participants to complete the race for each age group.
@@ -239,7 +251,7 @@ peers (there are more lower-bound outliers in women's plot).
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width = 0.8\textwidth]
+	\includegraphics[width = 0.75\textwidth]
 	{../figure/overview_tracked_runners-4.png}
 	\caption{
 		Top 50 participants who participated in the most races.
@@ -392,7 +404,9 @@ manage to sustain their performance throughout the years
 		\caption{}
 		\label{peak-women}
 	\end{subfigure}
-	\caption{I need a caption}
+	\caption{
+		Estimation of peak performance of tracked runners.
+	}
 	\label{peak}
 \end{figure}
 
@@ -416,7 +430,8 @@ According to Hawkins and Wiswell (2019), maximal oxygen uptake---the main
 correlate of running speed---varied in an inverse U trend across a lifetime,
 it is possible that running performance follows a quadratic model.
 From the average of the data we collected between men and women
-(models [7] and [8]),
+(see Figure \ref{peak}.)
+% (models [7] and [8]),
 we have determined the peak age is 26.5 years for men and 26 years for women.
 On average, at these ages, the peak time of runners is between 77.1--77.9
 minutes for men and 92.2-93.2 minutes for women (95\% confidence level).
@@ -477,11 +492,13 @@ the noise should follow Normal distribution.
 This is confirmed by the Q-Q plot of the estimated residuals,
 provided in Figure \ref{qq}.
 
-\begin{figure}[h!]
+\begin{figure}[hb]
 	\centering
-	\includegraphics[width = 0.8\textwidth]
-	{../figure/unnamed-chunk-2-1}
-	\caption{I need a caption}
+	\includegraphics[width = 0.7\textwidth]
+	{../figure/Image.png}
+	\caption{
+		Q-Q plot for estimated residuals.
+	}
 	\label{qq}
 \end{figure}
 
